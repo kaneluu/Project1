@@ -1,0 +1,9 @@
+package project1;
+
+public class TradingAccount extends Account {
+
+	float balance;
+	
+	StockPosition [] stockPosition = new StockPosition[3];
+	
+}

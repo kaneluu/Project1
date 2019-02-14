@@ -1,0 +1,83 @@
+package project1;
+
+import java.security.SecureRandom;
+
+public class StockEngine {
+	Stock [] stocks = new Stock [3];
+	SecureRandom rand = new SecureRandom();
+	
+	
+	public StockEngine() {
+		
+		Stock sStock1 = new Stock();
+		sStock1.stockSymbol = "ICP";
+		sStock1.pricePerShare = rand.nextInt(100)+20;
+		
+		Stock sStock2 = new Stock();
+		sStock2.stockSymbol = "APP";
+		sStock2.pricePerShare = rand.nextInt(100)+20;
+		
+		Stock sStock3 = new Stock();
+		sStock3.stockSymbol = "MIC";
+		sStock3.pricePerShare = rand.nextInt(100)+20;
+		
+		stocks[0] = sStock1;
+		stocks[1] = sStock2;
+		stocks[2] = sStock3;
+		
+}// end constructor
+
+	public void cycleTurn() {
+		
+		for (int x = 0; x < stocks.length; x++) {
+			
+			
+			int priceMove = getPrice(stocks[x].lastMoveUp);
+			stocks[x].pricePerShare = stocks[x].pricePerShare + priceMove;
+			
+			if (priceMove > -1) {
+				stocks[x].lastMoveUp = true;
+			}
+			
+			else{
+				stocks[x].lastMoveUp = false;
+			}
+			
+			System.out.println("Current stock symbols and prices:  " + stocks[x].stockSymbol + "---" + stocks[x].pricePerShare);
+		}
+		
+}// end cycleTurn
+	
+	public int getPrice(boolean lastMoveUp) {
+		
+		
+		int iStockMoveLimit = 3;
+		int iReturnPrice;
+		int iTrendChance = 75;
+		SecureRandom oRand = new SecureRandom();
+		iReturnPrice = oRand.nextInt(iStockMoveLimit + 1);
+		
+		for (int x = 0; x < stocks.length; x++) {
+			
+			if (oRand.nextInt(100) < iTrendChance) {
+				// Continue trend.
+				if (!lastMoveUp) {
+					// Switch to negative
+					iReturnPrice = iReturnPrice * -1;
+				}
+			}// end if
+			else {
+				// Change trend
+				if (lastMoveUp) {
+					// Switch to negative
+					iReturnPrice = iReturnPrice * -1;
+				}
+			}// end else
+		}// end for
+		
+	return iReturnPrice;
+	}// end getPrice method
+	
+
+	
+}// end class

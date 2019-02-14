@@ -1,0 +1,149 @@
+package project1;
+
+import java.util.Scanner;
+
+public class StockMarketSim {
+		
+		TradingAccount tradingAccount = new TradingAccount();
+		TradeQueue tradeQueue = new TradeQueue();
+		StockEngine stockEngine = new StockEngine();
+	
+	public void start() {
+		
+		
+		tradingAccount.username = "Jason Kane";
+		tradingAccount.balance = 1000;
+		tradingAccount.password = 92914;
+		
+		StockPosition pStock1 = new StockPosition();
+		pStock1.stockSymbol = stockEngine.stocks[0].stockSymbol;
+		pStock1.shareCount = 0;
+		
+		StockPosition pStock2 = new StockPosition();
+		pStock2.stockSymbol = stockEngine.stocks[1].stockSymbol;
+		pStock2.shareCount = 0;
+		
+		StockPosition pStock3 = new StockPosition();
+		pStock3.stockSymbol = stockEngine.stocks[2].stockSymbol;
+		pStock3.shareCount = 0;
+		
+		tradingAccount.stockPosition[0] = pStock1;
+		tradingAccount.stockPosition[1] = pStock2;
+		tradingAccount.stockPosition[2] = pStock3;
+		
+		runUI();
+	
+	}// end start method
+	
+	public void runUI () {
+		
+		Scanner input = new Scanner(System.in);
+		String userInput;
+		System.out.println("Type any word to start (except exit): ");
+		userInput = input.next();
+		while (!(userInput.equals("exit")) || tradingAccount.balance < 1) {
+			
+			
+			System.out.println("Please select menu's number to continue: \n"
+					+ "1: Account Status \n"
+					+ "2: Trade Stocks \n"
+					+ "3: Cycle Stock Market \n");
+			
+			int choice = input.nextInt(4);
+			
+			if (choice == 1) {
+			
+			System.out.println("Account status: " + "\nUsername: " +tradingAccount.username 
+				+ "\nBalance: "	+ tradingAccount.balance);
+			}
+			else if (choice == 2) {
+			String stockAnswer = null;
+			int shareAnswer = 0;
+			boolean purchaseAnswer = false ;
+			
+			System.out.println("Which stock do you want to buy/sell? ICP, APP, or MIC ?");
+			stockAnswer= input.next();
+			System.out.println("How many shares?");
+			shareAnswer= input.nextInt();
+			System.out.println("Buy or sell? ");
+			userInput = input.next();
+			switch(userInput) {
+			case "buy":
+				purchaseAnswer = true;
+				break;
+			case "sell":
+				purchaseAnswer = false;
+				break;
+			}
+			tradeQueue.enqueue(stockAnswer, shareAnswer, purchaseAnswer);
+			System.out.println("Stock Symbol: " + stockAnswer + " Shares: " + shareAnswer);
+			}
+			
+			else if (choice == 3) {
+			stockEngine.cycleTurn();
+			processTrades (tradeQueue);
+			}
+			System.out.println("Type any word to start (except exit): ");
+			userInput = input.next();
+			}// end while
+		System.out.println("Account's name: " + tradingAccount.username);
+		System.out.println("Account's balance: " + tradingAccount.balance);
+		
+	}// end runUI method
+	public void processTrades(TradeQueue tradeQueue) {
+		
+		while (tradeQueue.headTradeNode != null){
+		TradeNode tNode = tradeQueue.dequeue();
+		
+		
+		if (tNode.buy == true) {
+			
+			
+			if (tNode.stockSymbol.equals("ICP")) {
+				tradingAccount.stockPosition[0].shareCount += tNode.shareCount  ;
+				tradingAccount.balance -=  tNode.shareCount*(stockEngine.stocks[0].pricePerShare);
+				System.out.println("Account's share Count: " + tradingAccount.stockPosition[0].shareCount);
+				
+			}
+			else if (tNode.stockSymbol.equals("APP")) {
+				tradingAccount.stockPosition[1].shareCount += tNode.shareCount  ;
+				tradingAccount.balance -=  tNode.shareCount*(stockEngine.stocks[1].pricePerShare);
+				System.out.println("Account's share Count: " + tradingAccount.stockPosition[1].shareCount);
+				
+			}
+			else  {
+				tradingAccount.stockPosition[2].shareCount += tNode.shareCount  ;
+				tradingAccount.balance -=  tNode.shareCount*(stockEngine.stocks[2].pricePerShare);
+				System.out.println("Account's share Count: " + tradingAccount.stockPosition[2].shareCount);
+				
+			}
+		}	// end if
+		
+		else  {
+			if (tNode.stockSymbol.equals("ICP")) {
+			tradingAccount.stockPosition[0].shareCount += tNode.shareCount  ;
+			tradingAccount.balance += tNode.shareCount*(stockEngine.stocks[0].pricePerShare);
+			System.out.println("Account's share Count: " + tradingAccount.stockPosition[0].shareCount);
+			
+		}
+		else if (tNode.stockSymbol.equals("APP")) {
+			tradingAccount.stockPosition[1].shareCount += tNode.shareCount  ;
+			tradingAccount.balance += tNode.shareCount*(stockEngine.stocks[1].pricePerShare);
+			System.out.println("Account's share Count: " + tradingAccount.stockPosition[1].shareCount);
+			
+		}
+		else  {
+			tradingAccount.stockPosition[2].shareCount += tNode.shareCount  ;
+			tradingAccount.balance += tNode.shareCount*(stockEngine.stocks[2].pricePerShare);
+			System.out.println("Account's share Count: " + tradingAccount.stockPosition[2].shareCount);
+			
+		}
+			
+		}// end else
+		
+	}// end while
+		
+		
+	}// end processTrades method
+	
+}// end class

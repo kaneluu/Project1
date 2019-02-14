@@ -1,0 +1,7 @@
+package project1;
+
+public class StockPosition {
+
+	String stockSymbol;
+	int shareCount;
+}
