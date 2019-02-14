@@ -1,0 +1,9 @@
+package project1;
+
+public class TradeNode {
+
+	String stockSymbol;
+	int shareCount;
+	boolean buy;
+	TradeNode nextTradeNode;
+}
