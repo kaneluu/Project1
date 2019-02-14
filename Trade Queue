@@ -1,0 +1,40 @@
+package project1;
+
+public class TradeQueue {
+
+	TradeNode headTradeNode;
+	TradeNode tailTradeNode;
+	
+	public void enqueue (String sStockSymbol,int iPurchaseShareCount, boolean bBuy) {
+		
+		TradeNode eNode = new TradeNode();
+		eNode.stockSymbol = sStockSymbol;
+		eNode.shareCount = iPurchaseShareCount;
+		eNode.buy = bBuy;
+		bBuy = true;
+		
+		if (headTradeNode == null) {
+			headTradeNode = eNode;
+			tailTradeNode = eNode;
+		}// end if
+		
+		else {
+			eNode = tailTradeNode.nextTradeNode;
+			eNode = tailTradeNode;
+		}// end else
+}// end enqueue
+	
+	public TradeNode dequeue () {
+		if (headTradeNode == null) {
+			return null;
+		}// end if
+		else {
+			TradeNode dNode = new TradeNode();
+			dNode = headTradeNode;
+			headTradeNode = headTradeNode.nextTradeNode;
+			return dNode;
+		}// end else
+}// end dequeue
+	
+	
+}// end class
